@@ -4,7 +4,7 @@ let restaurants,
 var newMap
 var markers = []
 
-if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
+//if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
-  document.getElementById('map').setAttribute('tabindex', '-1');
   document.querySelectorAll('.leaflet-control> a').forEach(el => el.setAttribute('tabindex', '-1'));
 });
 

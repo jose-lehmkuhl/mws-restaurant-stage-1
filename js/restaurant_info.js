@@ -1,7 +1,7 @@
 let restaurant;
 var newMap;
 
-if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
+//if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -34,7 +34,6 @@ initMap = () => {
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
     }
-    document.getElementById('map').setAttribute('tabindex', '-1');
     document.querySelectorAll('.leaflet-control> a').forEach(el => el.setAttribute('tabindex', '-1'));
     document.querySelectorAll('.leaflet-marker-icon').forEach(marker => marker.setAttribute('tabindex', '-1'));
   });
@@ -98,7 +97,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.setAttribute('tabindex', '0');
-  image.setAttribute('alt', 'picture of the restaurant');
+  image.setAttribute('alt', 'Photo of' + restaurant.name);
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
   const cuisine = document.getElementById('restaurant-cuisine');
