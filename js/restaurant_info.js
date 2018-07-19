@@ -1,6 +1,8 @@
 let restaurant;
 var newMap;
 
+if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
+
 /**
  * Initialize map as soon as the page is loaded.
  */
@@ -22,7 +24,7 @@ initMap = () => {
         scrollWheelZoom: false
       });
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: '<your MAPBOX API KEY HERE>',
+        mapboxToken: 'pk.eyJ1Ijoiam9zZWxlaG1rdWhsIiwiYSI6ImNqajBhZTYxMjBmc3kzd3QwbXV3a2llc20ifQ.RePf32KUoCQPAo_PwBGmDQ',
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -32,6 +34,9 @@ initMap = () => {
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
     }
+    document.getElementById('map').setAttribute('tabindex', '-1');
+    document.querySelectorAll('.leaflet-control> a').forEach(el => el.setAttribute('tabindex', '-1'));
+    document.querySelectorAll('.leaflet-marker-icon').forEach(marker => marker.setAttribute('tabindex', '-1'));
   });
 }  
  
@@ -82,16 +87,24 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+  name.setAttribute('tabindex', '0');
+  name.setAttribute('aria-label', 'restaurant name,' + restaurant.name);
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+  address.setAttribute('tabindex', '0');
+  address.setAttribute('aria-label', 'address,' + restaurant.address);
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
+  image.setAttribute('tabindex', '0');
+  image.setAttribute('alt', 'picture of the restaurant');
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.setAttribute('tabindex', '0');
+  cuisine.setAttribute('aria-label',' cuisine,' + restaurant.cuisine_type);
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -106,9 +119,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.setAttribute('tabindex', '0');
+  hours.setAttribute('aria-label', 'operating hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
-
+    row.setAttribute('tabindex', '0');
     const day = document.createElement('td');
     day.innerHTML = key;
     row.appendChild(day);
@@ -127,6 +142,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
+  title.setAttribute('tabindex', '0');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -149,19 +165,25 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
+  name.setAttribute('class', 'name');
   name.innerHTML = review.name;
+  name.setAttribute('tabindex', '0');
   li.appendChild(name);
 
   const date = document.createElement('p');
+  date.setAttribute('class', 'date');
   date.innerHTML = review.date;
   li.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
+  rating.setAttribute('class', 'rating');
+  rating.setAttribute('tabindex', '0');
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
+  comments.setAttribute('tabindex', '0');
   li.appendChild(comments);
 
   return li;
