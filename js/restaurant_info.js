@@ -1,7 +1,7 @@
 let restaurant;
 var newMap;
 
-//if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
+if (navigator.serviceWorker) navigator.serviceWorker.register('./sw.js');
 
 /**
  * Initialize map as soon as the page is loaded.
